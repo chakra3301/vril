@@ -1,0 +1,316 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    cursor: none;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: #000;
+    color: #fff;
+}
+
+/* Background with gradient and noise effect */
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(154, 152, 152, 0.596) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(180, 180, 180, 0.51) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(174, 174, 174, 0.1) 0%, transparent 50%),
+        #000;
+    background-size: 100% 100%;
+    z-index: -1;
+    animation: backgroundShift 20s ease-in-out infinite;
+}
+
+/* Subtle background animation */
+@keyframes backgroundShift {
+    0%, 100% {
+        background-position: 0% 0%, 100% 100%, 50% 50%;
+    }
+    50% {
+        background-position: 100% 100%, 0% 0%, 50% 50%;
+    }
+}
+
+/* Custom cursor - CV image */
+.cursor {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    background-image: url('assets/cv.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    pointer-events: none;
+    z-index: 10000;
+    transform: translate(-50%, -50%);
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* Cursor trail container */
+.cursor-trail {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+/* Individual trail particles */
+.trail-particle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(circle, 
+        rgba(255, 0, 150, 0.8) 0%,
+        rgba(255, 100, 0, 0.6) 25%,
+        rgba(255, 200, 0, 0.5) 50%,
+        rgba(0, 255, 150, 0.4) 75%,
+        rgba(0, 150, 255, 0.3) 100%
+    );
+    filter: blur(8px);
+    transform: translate(-50%, -50%);
+    animation: trailFade 0.8s ease-out forwards;
+    mix-blend-mode: screen;
+}
+
+/* Larger trail particles for more intense effect */
+.trail-particle.large {
+    width: 30px;
+    height: 30px;
+    filter: blur(12px);
+}
+
+.trail-particle.medium {
+    width: 25px;
+    height: 25px;
+    filter: blur(10px);
+}
+
+/* Trail fade animation */
+@keyframes trailFade {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.3);
+    }
+}
+
+/* Title section in top left */
+.title-section {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    padding: 1.5rem;
+}
+
+.title-image {
+    max-width: 300px;
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Text section - left side under title */
+.text-section {
+    position: fixed;
+    top: 200px;
+    left: 3rem;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.text-title {
+    max-width: 350px;
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Text box - square, left side under title */
+.text-box {
+    width: 500px;
+    height: 500px;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.text-box::-webkit-scrollbar {
+    width: 6px;
+}
+
+.text-box::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.text-box::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.text-content {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    text-align: justify;
+    font-family: Georgia, 'Times New Roman', serif;
+}
+
+.text-content p {
+    margin: 0 0 1rem 0;
+}
+
+.social-buttons-container {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+}
+
+.social-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.social-btn {
+    display: block;
+    text-decoration: none;
+    transition: all 0.4s ease;
+    cursor: none;
+    position: relative;
+    border-radius: 8px;
+    overflow: visible;
+}
+
+.social-icon {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    display: block;
+    transition: all 0.4s ease;
+    filter: drop-shadow(0 0 0 rgba(255, 255, 255, 0));
+}
+
+.social-btn:hover .social-icon {
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.6)) 
+            drop-shadow(0 0 25px rgba(255, 255, 255, 0.4))
+            drop-shadow(0 0 35px rgba(255, 255, 255, 0.2));
+    transform: scale(1.05);
+}
+
+/* Chrome sun container - right side, half visible */
+.sun-container {
+    position: fixed;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    overflow: visible;
+    width: 50%;
+    height: 100vh;
+}
+
+/* Sun image with spinning animation - huge size */
+.sun-image {
+    position: relative;
+    width: 1200px;
+    height: 1200px;
+    max-width: none;
+    object-fit: contain;
+    z-index: 2;
+    animation: spin 20s linear infinite;
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+    transform-origin: center center;
+    margin-right: -600px;
+}
+
+/* Spinning animation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Subtle red glow effect around sun */
+.sun-glow {
+    position: absolute;
+    width: 120%;
+    height: 120%;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+        rgba(255, 0, 0, 0.15) 0%,
+        rgba(255, 50, 50, 0.1) 30%,
+        rgba(255, 100, 100, 0.05) 60%,
+        transparent 100%
+    );
+    filter: blur(40px);
+    z-index: 1;
+    animation: glowPulse 4s ease-in-out infinite;
+}
+
+/* Glow pulse animation */
+@keyframes glowPulse {
+    0%, 100% {
+        opacity: 0.4;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(1.05);
+    }
+}
+
+/* Content area */
+.content {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+/* Hide default cursor on interactive elements */
+a, button, input, textarea, select {
+    cursor: none;
+}
+
