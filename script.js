@@ -107,3 +107,95 @@ window.addEventListener('beforeunload', () => {
         }
     });
 });
+
+// Awaken button functionality
+const awakenBtn = document.getElementById('awakenBtn');
+const videoOverlay = document.getElementById('videoOverlay');
+const awakenVideo = document.getElementById('awakenVideo');
+const flashOverlay = document.getElementById('flashOverlay');
+
+// Ensure video is loaded and ready
+awakenVideo.load();
+
+// Wait for video to be ready
+awakenVideo.addEventListener('loadeddata', () => {
+    console.log('Video loaded and ready');
+});
+
+awakenVideo.addEventListener('error', (e) => {
+    console.error('Video error:', e);
+    console.error('Video error details:', awakenVideo.error);
+});
+
+awakenBtn.addEventListener('click', () => {
+    // Flash white
+    flashOverlay.classList.add('active');
+    
+    setTimeout(() => {
+        flashOverlay.classList.remove('active');
+        
+        // Show video overlay first
+        videoOverlay.classList.add('active');
+        
+        // Hide main page elements
+        document.body.style.overflow = 'hidden';
+        
+        // Reset video to start
+        awakenVideo.currentTime = 0;
+        
+        // Play video
+        const playPromise = awakenVideo.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                console.log('Video playing');
+                // Video is playing, now try fullscreen on the overlay container
+                setTimeout(() => {
+                    if (videoOverlay.requestFullscreen) {
+                        videoOverlay.requestFullscreen().catch(err => {
+                            console.log('Fullscreen error:', err);
+                        });
+                    } else if (videoOverlay.webkitRequestFullscreen) {
+                        videoOverlay.webkitRequestFullscreen();
+                    } else if (videoOverlay.mozRequestFullScreen) {
+                        videoOverlay.mozRequestFullScreen();
+                    } else if (videoOverlay.msRequestFullscreen) {
+                        videoOverlay.msRequestFullscreen();
+                    }
+                }, 200);
+            }).catch(err => {
+                console.error('Error playing video:', err);
+                // Video overlay is already shown, user can manually play if needed
+            });
+        } else {
+            // Fallback: try to play anyway
+            awakenVideo.play().catch(err => {
+                console.error('Play failed:', err);
+            });
+        }
+    }, 300);
+});
+
+// When video ends, return to main page
+awakenVideo.addEventListener('ended', () => {
+    // Exit fullscreen
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+    } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+    }
+    
+    // Hide video overlay
+    videoOverlay.classList.remove('active');
+    
+    // Reset video
+    awakenVideo.pause();
+    awakenVideo.currentTime = 0;
+    
+    // Show main page elements
+    document.body.style.overflow = 'auto';
+});
